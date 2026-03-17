@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="vi">
+  <texts>
+    <text name="HomePage" value="Trang chủ" />
+    <text name="About" value="Giới thiệu" />
+    <text name="WelcomeMessage" value="Chào mừng đến với TOEICReading4!" />
+    <text name="InvalidUserNameOrPassword" value="Sai tài khoản hoặc mật khẩu" />
+    <text name="PleaseEnterLoginInformation" value="Vui lòng nhập thông tin đăng nhập" />
+    <text name="UserNameOrEmail" value="Tên đăng nhập hoặc email" />
+    <text name="Password" value="Mật khẩu" />
+    <text name="RememberMe" value="Ghi nhớ đăng nhập" />
+    <text name="LogIn" value="Đăng nhập" />
+    <text name="Logout" value="Đăng xuất" />
+    <text name="Users" value="Người dùng" />
+    <text name="Tenants" value="Tenant" />
+    <text name="Roles" value="Vai trò" />
+    <text name="SavedSuccessfully" value="Lưu thành công" />
+    <text name="Save" value="Lưu" />
+    <text name="Cancel" value="Hủy" />
+    <text name="Edit" value="Chỉnh sửa" />
+    <text name="Delete" value="Xóa" />
+    <text name="Actions" value="Thao tác" />
+    <text name="Search" value="Tìm kiếm" />
+    <text name="SubmitExam" value="Nộp bài" />
+    <text name="TimeUp" value="Hết giờ!" />
+    <text name="AutoSubmitMessage" value="Hệ thống sẽ tự động nộp bài thi." />
+    <text name="UnansweredQuestions">{0} câu chưa trả lời. Bạn có chắc muốn nộp bài?</text>
+    <text name="AllQuestionsCompleted" value="Bạn đã hoàn thành tất cả câu hỏi. Xác nhận nộp bài?" />
+    <text name="ConfirmSubmit" value="Xác nhận nộp bài" />
+    <text name="GoBack" value="Quay lại" />
+    <text name="SubmitSuccess" value="Nộp bài thành công" />
+    <text name="GradingInProgress" value="Hệ thống đang chấm điểm..." />
+    <text name="Question" value="Câu" />
+    <text name="QuestionContent" value="Nội dung câu hỏi" />
+    <text name="CorrectAnswer" value="Đáp án đúng" />
+    <text name="DeleteExamConfirm" value="Xóa đề thi này và toàn bộ câu hỏi liên quan?" />
+    <text name="UploadHint" value="Dùng tag [Q] cho câu hỏi và [KEY] cho đáp án." />
+    <text name="NoQuestions" value="Chưa có câu hỏi trong phần này" />
+    <text name="UploadExam" value="Tải lên đề thi" />
+    <text name="UploadExamDescription" value="Tải file Word và để hệ thống tự động bóc tách theo cấu trúc TOEIC Reading." />
+    <text name="QuickGuide" value="Hướng dẫn nhanh" />
+    <text name="ExamTitle" value="Tên đề thi" />
+    <text name="ExamTitlePlaceholder" value="Ví dụ: TOEIC Reading Test 04" />
+    <text name="Duration" value="Thời lượng (phút)" />
+    <text name="Description" value="Mô tả ngắn" />
+    <text name="ExamData" value="Dữ liệu đề thi" />
+    <text name="ExamFile" value="File đề thi (.docx)" />
+    <text name="InvalidExamFile" value="Vui lòng chọn file đề thi .docx hợp lệ." />
+    <text name="ExamNotFound" value="Không tìm thấy đề thi." />
+    <text name="InvalidExamSubmission" value="Dữ liệu nộp bài không hợp lệ." />
+    <text name="ExamStartTitle">{0} - Bài thi TOEIC Reading</text>
+    <text name="ToeicReadingPartsLabel" value="TOEIC Reading Part 5, 6 và 7" />
+    <text name="StudentLabel" value="Học viên" />
+    <text name="Part6ReadingTitle" value="Part 6: Hoàn thành đoạn văn" />
+    <text name="Part7ReadingTitle" value="Part 7: Đọc hiểu" />
+    <text name="ExamTimeRemaining" value="Thời gian còn lại" />
+    <text name="AnswerSheet" value="Bảng trả lời" />
+    <text name="ExamQuestionCountSummary">{0} câu hỏi • {1} phút</text>
+    <text name="SubmitErrorTitle" value="Nộp bài thất bại" />
+    <text name="SubmitErrorMessage" value="Không thể nộp bài thi. Vui lòng thử lại." />
+    <text name="Ok" value="Đồng ý" />
+    <text name="ExamResultPageTitle">{0} - Kết quả</text>
+    <text name="EstimatedReadingScore" value="Điểm Reading ước tính" />
+    <text name="ExamTimeSpent" value="Thời gian làm bài" />
+    <text name="CorrectAnswersLabel" value="Câu đúng" />
+    <text name="IncorrectAnswersLabel" value="Câu sai" />
+    <text name="SkippedAnswersLabel" value="Câu bỏ trống" />
+    <text name="DetailedSectionAnalysis" value="Phân tích chi tiết theo phần" />
+    <text name="Part5ResultTitle" value="Part 5: Câu chưa hoàn chỉnh" />
+    <text name="Part6ResultTitle" value="Part 6: Hoàn thành đoạn văn" />
+    <text name="Part7ResultTitle" value="Part 7: Đọc hiểu" />
+    <text name="ImprovementTipsTitle" value="Gợi ý cải thiện" />
+    <text name="ImprovementTipKeepStrengths" value="Tiếp tục ôn lại các phần bạn đang làm tốt để giữ sự ổn định." />
+    <text name="ImprovementTipWeakestPart">Hãy ưu tiên luyện tập {0} ở lần tiếp theo để cải thiện phần yếu nhất.</text>
+    <text name="ImprovementTipPracticeMore" value="Luyện đề theo thời gian thực để tăng tốc độ và độ chính xác." />
+    <text name="DashboardPage" value="Bảng điều khiển" />
+    <text name="DashboardDescription" value="Theo dõi đề thi đã tải lên, hoạt động gần đây và kết quả TOEIC Reading mới nhất." />
+    <text name="ExamLibraryPageTitle" value="Thư viện đề thi" />
+    <text name="ExamLibrary" value="Thư viện đề thi" />
+    <text name="ExamLibraryDescription" value="Xem danh sách đề TOEIC Reading, xem trước từng đề và tiếp tục từ kết quả gần nhất." />
+    <text name="SearchExamPlaceholder" value="Tìm theo tên đề thi..." />
+    <text name="NoExamsYetTitle" value="Chưa có đề thi nào" />
+    <text name="NoExamsYetDescription" value="Hãy tải lên file TOEIC Reading để tạo bộ đề đầu tiên." />
+    <text name="CompletedStatus" value="Đã hoàn thành" />
+    <text name="NewStatus" value="Mới" />
+    <text name="ToeicReadingCategory" value="TOEIC Reading" />
+    <text name="DurationLabel" value="Thời lượng" />
+    <text name="MinutesShort" value="phút" />
+    <text name="QuestionCountLabel" value="Số câu" />
+    <text name="LatestResultLabel" value="Kết quả gần nhất" />
+    <text name="ReadyToStartLabel" value="Sẵn sàng làm bài" />
+    <text name="ReadyToStartDescription" value="Bạn chưa làm đề thi này." />
+    <text name="PreviewExam" value="Xem trước" />
+    <text name="ViewResult" value="Xem kết quả" />
+    <text name="StartExam" value="Bắt đầu thi" />
+    <text name="RetryExam" value="Làm lại đề" />
+    <text name="UploadInfoFileRequirement" value="Sử dụng file Word .docx chứa nội dung TOEIC Reading." />
+    <text name="UploadInfoTagUsage" value="Dùng tag [Q] cho câu hỏi và [KEY] cho đáp án để bộ phân tích nhận diện chính xác." />
+    <text name="UploadInfoSupportedParts" value="Hiện hỗ trợ TOEIC Reading Part 5, 6 và 7." />
+    <text name="DownloadTemplate" value="Tải file mẫu" />
+    <text name="GeneralInfoSection" value="Thông tin chung" />
+    <text name="InputDataSection" value="File đầu vào" />
+    <text name="ShortDescriptionPlaceholder" value="Ghi chú thêm cho bộ đề này..." />
+    <text name="UploadBoxLabel" value="Bấm để chọn file hoặc kéo thả vào đây" />
+    <text name="UploadBoxHint" value="Hệ thống sẽ tự động bóc tách cấu trúc đề." />
+    <text name="UploadSelectedFile" value="File đã chọn" />
+    <text name="UploadProcessing" value="Đang xử lý..." />
+    <text name="UploadSuccess" value="Tải lên và bóc tách đề thi thành công." />
+    <text name="UploadFormatError" value="Lỗi định dạng đề thi" />
+    <text name="UploadGenericError" value="Đã xảy ra lỗi khi xử lý file đề thi." />
+    <text name="PreviewExamPageTitle">{0} - Xem trước</text>
+    <text name="DraftStatus" value="Bản nháp" />
+    <text name="DeleteExamDraft" value="Xóa đề thi" />
+    <text name="Part5PreviewTitle" value="Part 5: Câu chưa hoàn chỉnh" />
+    <text name="Part6PreviewTitle" value="Part 6: Hoàn thành đoạn văn" />
+    <text name="Part7PreviewTitle" value="Part 7: Đọc hiểu" />
+    <text name="EditQuestionDialogTitle" value="Chỉnh sửa câu" />
+    <text name="ConfirmActionTitle" value="Xác nhận" />
+    <text name="TotalExamsCreated" value="Đề đã tải lên" />
+    <text name="ExamsCompleted" value="Đề đã hoàn thành" />
+    <text name="AvailableExamsLabel" value="Đề khả dụng" />
+    <text name="BestScoreLabel" value="Điểm cao nhất" />
+    <text name="RecentActivityTitle" value="Hoạt động gần đây" />
+    <text name="NoRecentActivityDescription" value="Hãy tải đề hoặc bắt đầu làm bài để xem hoạt động tại đây." />
+    <text name="QuickActionsTitle" value="Thao tác nhanh" />
+    <text name="UploadNewExamAction" value="Tải lên đề mới" />
+    <text name="BrowseExamLibraryAction" value="Mở thư viện đề" />
+  </texts>
+</localizationDictionary>

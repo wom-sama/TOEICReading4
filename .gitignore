@@ -1,0 +1,18 @@
+# Bỏ qua các thư mục build
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+
+# Bỏ qua các file tạm của Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Bỏ qua Node modules (nếu ASP.NET Boilerplate có dùng frontend package)
+node_modules/
+
+# Bỏ qua file log và cấu hình cá nhân
+*.log
+appsettings.Development.jsonádsad

@@ -1,0 +1,244 @@
+﻿@using Abp.Authorization.Users
+@model TOEICReading4.Web.Models.Account.LoginFormViewModel
+@{
+    ViewBag.Title = L("LogIn");
+    Layout = "_Layout";
+}
+
+@section styles {
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --light: #f9fafb;
+            --dark: #111827;
+            --gray: #6b7280;
+            --shadow: 0 10px 32px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            width: 360px;
+            margin: 7% auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .login-logo a {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .login-logo a i {
+            font-size: 2rem;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+        }
+
+        .login-card-body {
+            padding: 2.5rem 2rem;
+            background: white;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            height: auto;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--gray);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .form-check label {
+            font-size: 0.9rem;
+            color: var(--dark);
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+            color: white;
+        }
+
+        .icheck-primary input {
+            accent-color: var(--primary);
+        }
+
+        .row > [class*='col-']:last-child button {
+            margin-top: 0;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @@keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        a.text-center {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a.text-center:hover {
+            text-decoration: underline;
+        }
+
+        @@media (max-width: 480px) {
+            .login-box {
+                width: 100%;
+                margin: 1rem auto;
+            }
+
+            .login-card-body {
+                padding: 1.5rem 1rem;
+            }
+
+            .login-logo a {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+}
+
+<div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-sm);">
+    @Html.ValidationSummary(true)
+
+    <form id="LoginForm" asp-action="Login" method="post" novalidate>
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" name="returnUrlHash" />
+
+        <div class="form-group">
+            <label class="form-label">@L("UserNameOrEmail")</label>
+            <input type="text" name="usernameOrEmailAddress" class="form-control" placeholder="@L("UserNameOrEmail")" required autofocus maxlength="@AbpUserBase.MaxEmailAddressLength" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">@L("Password")</label>
+            <input type="password" class="form-control" name="Password" placeholder="@L("Password")" required maxlength="@AbpUserBase.MaxPlainPasswordLength" autocomplete="current-password">
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="RememberMe" name="RememberMe" value="true">
+            <label class="form-check-label" for="RememberMe">@L("RememberMe")</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-flat btn-block" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-weight: 600;">
+            @L("LogIn")
+        </button>
+    </form>
+
+    @if (Model.IsSelfRegistrationAllowed)
+    {
+        <hr style="margin: 1.5rem 0;" />
+        <p style="text-align: center; margin-bottom: 0;">
+            <a asp-action="Register" class="text-center">
+                <i class="fa fa-plus-circle me-1"></i> @L("Register")
+            </a>
+        </p>
+    }
+</div>

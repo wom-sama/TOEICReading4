@@ -1,0 +1,348 @@
+@using TOEICReading4.Web.Startup
+@{
+    ViewBag.Title = L("UploadExam");
+    ViewBag.CurrentPageName = PageNames.Home;
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --surface: #ffffff;
+            --surface-alt: #f8fafc;
+            --text: #111827;
+            --muted: #64748b;
+            --border: #dbe3ef;
+            --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .upload-shell {
+            padding: 2rem 0 3rem;
+        }
+
+        .upload-hero {
+            border-radius: 24px;
+            padding: 2.35rem 2rem;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 62%, #2563eb 100%);
+            color: #fff;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-hero h1 {
+            margin: 0 0 8px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .upload-hero p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .info-card,
+        .form-card {
+            border-radius: 22px;
+            background: var(--surface);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+        }
+
+        .info-card h3,
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 1rem;
+            font-size: 1.08rem;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: var(--muted);
+        }
+
+        .info-card li + li {
+            margin-top: 8px;
+        }
+
+        .template-link {
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.45rem;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .form-control {
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 0.85rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.08);
+        }
+
+        .upload-dropzone {
+            border: 2px dashed rgba(37, 99, 235, 0.45);
+            border-radius: 22px;
+            background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
+            padding: 2.6rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-dropzone:hover,
+        .upload-dropzone.dragover {
+            border-color: var(--success);
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            transform: translateY(-2px);
+        }
+
+        .upload-dropzone input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+
+        .upload-hint {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .selected-file {
+            display: none;
+            margin-top: 1rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            border: 0;
+            border-radius: 14px;
+            padding: 0.85rem 1.25rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .action-btn.secondary {
+            color: var(--text);
+            background: #fff;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+        }
+
+        .action-btn.primary {
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+        }
+
+        @@media (max-width: 576px) {
+            .upload-hero,
+            .info-card,
+            .form-card {
+                padding-left: 1.1rem;
+                padding-right: 1.1rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+}
+
+<div class="container-fluid px-3 px-md-4 upload-shell">
+    <div class="upload-hero">
+        <h1><i class="fas fa-file-upload me-2"></i>@L("UploadExam")</h1>
+        <p>@L("UploadExamDescription")</p>
+    </div>
+
+    <div class="info-card">
+        <h3><i class="fas fa-circle-info text-primary"></i>@L("QuickGuide")</h3>
+        <ul>
+            <li>@L("UploadInfoFileRequirement")</li>
+            <li>@L("UploadInfoTagUsage")</li>
+            <li>@L("UploadInfoSupportedParts")</li>
+            <li><a class="template-link" href="/Template/Toeic_Template.docx">@L("DownloadTemplate")</a></li>
+        </ul>
+    </div>
+
+    <form id="frmUploadExam" enctype="multipart/form-data">
+        <div class="form-card">
+            <h3 class="section-title"><i class="fas fa-info-circle text-primary"></i>@L("GeneralInfoSection")</h3>
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label class="field-label">@L("ExamTitle") <span class="required">*</span></label>
+                    <input type="text" class="form-control" name="examTitle" placeholder="@L("ExamTitlePlaceholder")" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="field-label">@L("DurationLabel") <span class="required">*</span></label>
+                    <input type="number" class="form-control" name="duration" value="75" min="30" max="180" required />
+                </div>
+            </div>
+
+            <div>
+                <label class="field-label">@L("Description")</label>
+                <textarea class="form-control" name="description" rows="3" placeholder="@L("ShortDescriptionPlaceholder")"></textarea>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h3 class="section-title"><i class="fas fa-file-import text-primary"></i>@L("InputDataSection")</h3>
+            <label class="field-label">@L("ExamFile") <span class="required">*</span></label>
+
+            <label class="upload-dropzone" for="fileInput">
+                <div class="upload-icon">
+                    <i class="fas fa-file-word"></i>
+                </div>
+                <div class="upload-title" id="uploadLabel">@L("UploadBoxLabel")</div>
+                <p class="upload-hint">@L("UploadBoxHint")</p>
+                <div class="selected-file" id="fileNameDisplay">
+                    <i class="fas fa-check-circle me-2"></i><span id="selectedFileName"></span>
+                </div>
+                <input type="file" id="fileInput" name="examFile" accept=".docx" required />
+            </label>
+
+            <div class="form-actions">
+                <a href="/Home/Dashboard" class="action-btn secondary">
+                    <i class="fas fa-arrow-left me-2"></i>@L("DashboardPage")
+                </a>
+                <button type="submit" class="action-btn primary" id="btnSubmit">
+                    <i class="fas fa-cloud-upload-alt me-2"></i>@L("UploadExam")
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            function updateSelectedFile(file) {
+                if (file) {
+                    $('#selectedFileName').text(file.name);
+                    $('#fileNameDisplay').show();
+                    $('#uploadLabel').text('@L("UploadSelectedFile")');
+                } else {
+                    $('#fileNameDisplay').hide();
+                    $('#uploadLabel').text('@L("UploadBoxLabel")');
+                }
+            }
+
+            $('#fileInput').on('change', function () {
+                var file = this.files && this.files.length ? this.files[0] : null;
+                updateSelectedFile(file);
+            });
+
+            $('.upload-dropzone').on('dragover', function (e) {
+                e.preventDefault();
+                $(this).addClass('dragover');
+            });
+
+            $('.upload-dropzone').on('dragleave', function () {
+                $(this).removeClass('dragover');
+            });
+
+            $('.upload-dropzone').on('drop', function (e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+
+                var files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    $('#fileInput')[0].files = files;
+                    updateSelectedFile(files[0]);
+                }
+            });
+
+            $('#frmUploadExam').on('submit', function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+                $('#btnSubmit')
+                    .prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin me-2"></i>@L("UploadProcessing")');
+
+                $.ajax({
+                    url: '/Exam/UploadAndParse',
+                    type: 'POST',
+                    headers: {
+                        'X-XSRF-TOKEN': abp.security.antiForgery.getToken()
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        var data = response.result ? response.result : response;
+
+                        abp.message.success('@L("UploadSuccess")', '@L("SavedSuccessfully")').done(function () {
+                            if (data.examId) {
+                                window.location.href = '/Exam/Preview/' + data.examId;
+                            }
+                        });
+                    },
+                    error: function (err) {
+                        var errorMessage = '@L("UploadGenericError")';
+
+                        try {
+                            var responseJson = JSON.parse(err.responseText);
+                            errorMessage = responseJson.result || responseJson.error?.message || err.responseText || errorMessage;
+                        } catch (parseError) {
+                            errorMessage = err.responseText || errorMessage;
+                        }
+
+                        abp.message.error(errorMessage, '@L("UploadFormatError")');
+                    },
+                    complete: function () {
+                        $('#btnSubmit')
+                            .prop('disabled', false)
+                            .html('<i class="fas fa-cloud-upload-alt me-2"></i>@L("UploadExam")');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,687 @@
+@using System.Globalization
+@model TOEICReading4.Exams.Exam
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    Layout = null;
+    var questions = Model.Questions.OrderBy(q => q.QuestionNumber).ToList();
+    var passages = Model.Passages.OrderBy(p => p.PartNumber).ThenBy(p => p.Id).ToList();
+    var antiForgeryToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.Name">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@L("ExamStartTitle", Model.Title)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --surface: #ffffff;
+            --surface-alt: #f8fafc;
+            --border: #dbe3ef;
+            --text: #111827;
+            --muted: #64748b;
+            --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.18), transparent 28%),
+                linear-gradient(180deg, #eef4ff 0%, #f8fafc 40%, #eef2ff 100%);
+            color: var(--text);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .exam-shell {
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 24px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 70%, #2563eb 100%);
+            color: #fff;
+            box-shadow: var(--shadow);
+            margin-bottom: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .exam-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .exam-brand-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.14);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .exam-brand h1 {
+            margin: 0 0 4px;
+            font-size: 1.55rem;
+            font-weight: 700;
+        }
+
+        .exam-brand p,
+        .exam-meta p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .exam-meta {
+            text-align: right;
+        }
+
+        .exam-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .main-column {
+            min-width: 0;
+        }
+
+        .sidebar-column {
+            position: sticky;
+            top: 18px;
+        }
+
+        .sidebar-card,
+        .passage-card,
+        .question-card {
+            background: var(--surface);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-card {
+            padding: 18px;
+        }
+
+        .timer-panel {
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 45%, #0f172a 100%);
+            color: #fff;
+            margin-bottom: 18px;
+        }
+
+        .timer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+        }
+
+        .timer-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: "Courier New", monospace;
+            line-height: 1;
+        }
+
+        .timer-value.danger {
+            color: #fde68a;
+            animation: pulse 1s infinite;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+
+        .answer-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+            max-height: 340px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .answer-grid-item {
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-alt);
+            color: var(--muted);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .answer-grid-item:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .answer-grid-item.answered {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .submit-button {
+            width: 100%;
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(16, 185, 129, 0.28);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .passage-card {
+            padding: 22px;
+            margin-bottom: 14px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        }
+
+        .passage-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .passage-body {
+            line-height: 1.9;
+            color: #1f2937;
+        }
+
+        .question-card {
+            padding: 22px;
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 6px;
+            background: linear-gradient(180deg, var(--primary) 0%, #60a5fa 100%);
+        }
+
+        .question-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .question-content {
+            font-size: 1.03rem;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--surface-alt);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.04);
+            transform: translateY(-1px);
+        }
+
+        .option-item.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.09);
+        }
+
+        .option-marker {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--muted);
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-marker {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .option-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .option-check {
+            color: var(--primary);
+            display: none;
+        }
+
+        .option-item.selected .option-check {
+            display: inline-block;
+        }
+
+        @@media (max-width: 1100px) {
+            .exam-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-column {
+                position: static;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .exam-shell {
+                padding: 12px;
+            }
+
+            .exam-header {
+                padding: 18px;
+                border-radius: 20px;
+            }
+
+            .exam-brand h1 {
+                font-size: 1.25rem;
+            }
+
+            .exam-meta {
+                text-align: left;
+                width: 100%;
+            }
+
+            .question-card,
+            .passage-card,
+            .sidebar-card {
+                border-radius: 18px;
+                padding: 18px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .answer-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .timer-value {
+                font-size: 2rem;
+            }
+
+            .option-item {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-shell">
+        <div class="exam-header">
+            <div class="exam-brand">
+                <div class="exam-brand-icon">
+                    <i class="fas fa-book-open-reader"></i>
+                </div>
+                <div>
+                    <h1>@Model.Title</h1>
+                    <p>@L("ToeicReadingPartsLabel")</p>
+                </div>
+            </div>
+            <div class="exam-meta">
+                <p><strong>@(User.Identity?.Name ?? L("StudentLabel"))</strong></p>
+                <p id="studentInfo"></p>
+            </div>
+        </div>
+
+        <div class="exam-grid">
+            <div class="main-column">
+                @foreach (var question in questions.Where(q => q.PartNumber == 5))
+                {
+                    <div class="question-card" id="scroll-q-@question.QuestionNumber">
+                        <div class="question-badge">
+                            <i class="fas fa-hashtag"></i>
+                            <span>@L("Question") @question.QuestionNumber</span>
+                        </div>
+                        <div class="question-content">@Html.Raw(question.Content?.Replace("\n", "<br />"))</div>
+                        <div class="options-container" data-qid="@question.Id" data-qnum="@question.QuestionNumber">
+                            @foreach (var option in new[] { "A", "B", "C", "D" })
+                            {
+                                string optionText = option == "A" ? question.OptionA : option == "B" ? question.OptionB : option == "C" ? question.OptionC : question.OptionD;
+                                <div class="option-item" data-opt="@option">
+                                    <div class="option-marker">@option</div>
+                                    <div class="option-text">@optionText</div>
+                                    <i class="fas fa-check-circle option-check"></i>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @foreach (var partNumber in new[] { 6, 7 })
+                {
+                    foreach (var passage in passages.Where(p => p.PartNumber == partNumber))
+                    {
+                        <div class="passage-card">
+                            <div class="passage-title">
+                                <i class="fas fa-file-lines"></i>
+                                <span>@(partNumber == 6 ? L("Part6ReadingTitle") : L("Part7ReadingTitle"))</span>
+                            </div>
+                            <div class="passage-body">@Html.Raw(passage.Content?.Replace("\n", "<br />"))</div>
+                        </div>
+
+                        @foreach (var question in questions.Where(q => q.PassageId == passage.Id))
+                        {
+                            <div class="question-card" id="scroll-q-@question.QuestionNumber">
+                                <div class="question-badge">
+                                    <i class="fas fa-hashtag"></i>
+                                    <span>@L("Question") @question.QuestionNumber</span>
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(question.Content))
+                                {
+                                    <div class="question-content">@Html.Raw(question.Content.Replace("\n", "<br />"))</div>
+                                }
+                                <div class="options-container" data-qid="@question.Id" data-qnum="@question.QuestionNumber">
+                                    @foreach (var option in new[] { "A", "B", "C", "D" })
+                                    {
+                                        string optionText = option == "A" ? question.OptionA : option == "B" ? question.OptionB : option == "C" ? question.OptionC : question.OptionD;
+                                        <div class="option-item" data-opt="@option">
+                                            <div class="option-marker">@option</div>
+                                            <div class="option-text">@optionText</div>
+                                            <i class="fas fa-check-circle option-check"></i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="sidebar-column">
+                <div class="sidebar-card">
+                    <div class="timer-panel">
+                        <div class="timer-title">
+                            <i class="far fa-clock"></i>
+                            <span>@L("ExamTimeRemaining")</span>
+                        </div>
+                        <div class="timer-value" id="countdownTimer">--:--</div>
+                    </div>
+
+                    <div class="answer-sheet-header">
+                        <span>@L("AnswerSheet")</span>
+                        <span><span id="answeredCount">0</span>/@questions.Count</span>
+                    </div>
+
+                    <div class="answer-grid">
+                        @foreach (var question in questions)
+                        {
+                            <div class="answer-grid-item" id="grid-item-@question.QuestionNumber" onclick="scrollToQuestion(@question.QuestionNumber)" title="@L("Question") @question.QuestionNumber">
+                                @question.QuestionNumber
+                            </div>
+                        }
+                    </div>
+
+                    <button class="submit-button" id="btnSubmitExam">
+                        <i class="fas fa-flag-checkered me-2"></i>@L("SubmitExam")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var durationMinutes = @Model.DurationMinutes;
+        var timeRemaining = durationMinutes * 60;
+        var totalQuestions = @questions.Count;
+        var antiForgeryToken = '@antiForgeryToken';
+        var studentAnswers = {};
+        var isSubmitting = false;
+
+        var lTimeUp = '@L("TimeUp")';
+        var lAutoSubmitMessage = '@L("AutoSubmitMessage")';
+        var lUnansweredTemplate = '@L("UnansweredQuestions")';
+        var lAllCompleted = '@L("AllQuestionsCompleted")';
+        var lConfirmSubmit = '@L("ConfirmSubmit")';
+        var lSubmitExam = '@L("SubmitExam")';
+        var lGoBack = '@L("GoBack")';
+        var lSubmitSuccess = '@L("SubmitSuccess")';
+        var lGradingInProgress = '@L("GradingInProgress")';
+        var lSubmitErrorTitle = '@L("SubmitErrorTitle")';
+        var lSubmitErrorMessage = '@L("SubmitErrorMessage")';
+        var lOk = '@L("Ok")';
+
+        $(function () {
+            $('#studentInfo').text('@L("ExamQuestionCountSummary", questions.Count, Model.DurationMinutes)');
+            startTimer();
+
+            $('.option-item').on('click', function () {
+                var container = $(this).closest('.options-container');
+                var questionId = container.data('qid');
+                var questionNumber = container.data('qnum');
+                var selectedOption = $(this).data('opt');
+
+                container.find('.option-item').removeClass('selected');
+                $(this).addClass('selected');
+
+                studentAnswers[questionId] = selectedOption;
+                $('#grid-item-' + questionNumber).addClass('answered');
+                $('#answeredCount').text(Object.keys(studentAnswers).length);
+            });
+
+            $('#btnSubmitExam').on('click', function () {
+                confirmSubmit();
+            });
+        });
+
+        function startTimer() {
+            var timerElement = $('#countdownTimer');
+
+            var timerInterval = setInterval(function () {
+                var minutes = Math.floor(Math.max(timeRemaining, 0) / 60);
+                var seconds = Math.max(timeRemaining, 0) % 60;
+
+                timerElement.text(String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0'));
+
+                if (timeRemaining <= 300) {
+                    timerElement.addClass('danger');
+                }
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    Swal.fire({
+                        title: lTimeUp,
+                        text: lAutoSubmitMessage,
+                        icon: 'warning',
+                        confirmButtonText: lOk,
+                        allowOutsideClick: false
+                    }).then(function () {
+                        submitExam();
+                    });
+                    return;
+                }
+
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function confirmSubmit() {
+            var unansweredCount = totalQuestions - Object.keys(studentAnswers).length;
+            var confirmText = unansweredCount > 0
+                ? lUnansweredTemplate.replace('{0}', unansweredCount)
+                : lAllCompleted;
+
+            Swal.fire({
+                title: lConfirmSubmit,
+                text: confirmText,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: lSubmitExam,
+                cancelButtonText: lGoBack,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#94a3b8'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    submitExam();
+                }
+            });
+        }
+
+        function submitExam() {
+            if (isSubmitting) {
+                return;
+            }
+
+            isSubmitting = true;
+            $('#btnSubmitExam').prop('disabled', true);
+
+            var payload = {
+                examId: @Model.Id,
+                timeTakenSeconds: Math.max(0, (durationMinutes * 60) - Math.max(timeRemaining, 0)),
+                answers: studentAnswers
+            };
+
+            $.ajax({
+                url: '/Exam/SubmitExam',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'X-XSRF-TOKEN': antiForgeryToken
+                },
+                data: JSON.stringify(payload),
+                success: function (response) {
+                    var data = response && response.result ? response.result : response;
+
+                    Swal.fire({
+                        title: lSubmitSuccess,
+                        text: lGradingInProgress,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1400
+                    }).then(function () {
+                        window.location.href = data.targetUrl || '/Exam/List';
+                    });
+                },
+                error: function (xhr) {
+                    isSubmitting = false;
+                    $('#btnSubmitExam').prop('disabled', false);
+
+                    var message = lSubmitErrorMessage;
+                    if (xhr.responseText) {
+                        message = xhr.responseText;
+                    }
+
+                    Swal.fire(lSubmitErrorTitle, message, 'error');
+                }
+            });
+        }
+
+        function scrollToQuestion(questionNumber) {
+            var target = $('#scroll-q-' + questionNumber);
+            if (!target.length) {
+                return;
+            }
+
+            $('html, body').animate({ scrollTop: target.offset().top - 20 }, 400);
+            target.css('box-shadow', '0 0 0 3px rgba(37, 99, 235, 0.18)');
+            setTimeout(function () {
+                target.css('box-shadow', '');
+            }, 900);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+@model TOEICReading4.Exams.Exam
+@{
+    ViewBag.Title = L("PreviewExamPageTitle", Model.Title);
+
+    var questions = Model.Questions.OrderBy(q => q.QuestionNumber).ToList();
+    var part5 = questions.Where(q => q.QuestionNumber >= 101 && q.QuestionNumber <= 130).ToList();
+    var part6 = questions.Where(q => q.QuestionNumber >= 131 && q.QuestionNumber <= 146).ToList();
+    var part7 = questions.Where(q => q.QuestionNumber >= 147 && q.QuestionNumber <= 200).ToList();
+}
+
+@{
+    void RenderPart(List<TOEICReading4.Exams.Question> items, string title)
+    {
+        <h5 class="text-primary fw-bold mb-3 mt-4">@title</h5>
+
+        if (!items.Any())
+        {
+            <p class="text-muted fst-italic">@L("NoQuestions")</p>
+        }
+
+        foreach (var question in items)
+        {
+            <div class="card shadow-sm mb-3" id="q-card-@question.Id">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center gap-3">
+                    <strong>@L("Question") @question.QuestionNumber</strong>
+                    <button class="btn btn-sm btn-primary edit-q-btn"
+                            data-id="@question.Id"
+                            data-num="@question.QuestionNumber"
+                            data-content="@question.Content"
+                            data-a="@question.OptionA"
+                            data-b="@question.OptionB"
+                            data-c="@question.OptionC"
+                            data-d="@question.OptionD"
+                            data-key="@question.CorrectKey">
+                        <i class="fas fa-edit me-1"></i>@L("Edit")
+                    </button>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">@Html.Raw(question.Content?.Replace("\n", "<br />"))</p>
+                    <div class="row g-2">
+                        <div class="col-md-3"><span class="@(question.CorrectKey == "A" ? "fw-bold text-success" : string.Empty)">[A] @question.OptionA</span></div>
+                        <div class="col-md-3"><span class="@(question.CorrectKey == "B" ? "fw-bold text-success" : string.Empty)">[B] @question.OptionB</span></div>
+                        <div class="col-md-3"><span class="@(question.CorrectKey == "C" ? "fw-bold text-success" : string.Empty)">[C] @question.OptionC</span></div>
+                        <div class="col-md-3"><span class="@(question.CorrectKey == "D" ? "fw-bold text-success" : string.Empty)">[D] @question.OptionD</span></div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-lg-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+            <div>
+                <h2 class="fw-bold mb-2">@Model.Title</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge rounded-pill text-bg-warning">@L("DraftStatus")</span>
+                    <span class="badge rounded-pill text-bg-info">@L("DurationLabel"): @Model.DurationMinutes @L("MinutesShort")</span>
+                    <span class="badge rounded-pill text-bg-success">@L("QuestionCountLabel"): @questions.Count</span>
+                </div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a class="btn btn-outline-primary" href="/Exam/List">
+                    <i class="fas fa-book-open me-2"></i>@L("ExamLibrary")
+                </a>
+                <button class="btn btn-outline-danger btn-delete-exam">
+                    <i class="fas fa-trash me-2"></i>@L("DeleteExamDraft")
+                </button>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills mb-4" id="preview-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-p5" data-bs-toggle="pill" data-bs-target="#panel-p5" type="button">@L("Part5PreviewTitle")</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-p6" data-bs-toggle="pill" data-bs-target="#panel-p6" type="button">@L("Part6PreviewTitle")</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-p7" data-bs-toggle="pill" data-bs-target="#panel-p7" type="button">@L("Part7PreviewTitle")</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="panel-p5" role="tabpanel">
+                @{ RenderPart(part5, L("Part5PreviewTitle")); }
+            </div>
+            <div class="tab-pane fade" id="panel-p6" role="tabpanel">
+                @{ RenderPart(part6, L("Part6PreviewTitle")); }
+            </div>
+            <div class="tab-pane fade" id="panel-p7" role="tabpanel">
+                @{ RenderPart(part7, L("Part7PreviewTitle")); }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditQuestionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">@L("EditQuestionDialogTitle") <span id="modal-q-num"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="EditQuestionForm">
+                    <input type="hidden" id="edit-id" name="Id" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">@L("QuestionContent")</label>
+                        <textarea class="form-control" id="edit-content" name="Content" rows="3"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">[A]</label>
+                            <input class="form-control" id="edit-a" name="OptionA" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">[B]</label>
+                            <input class="form-control" id="edit-b" name="OptionB" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">[C]</label>
+                            <input class="form-control" id="edit-c" name="OptionC" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">[D]</label>
+                            <input class="form-control" id="edit-d" name="OptionD" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold">@L("CorrectAnswer")</label>
+                        <select class="form-select" id="edit-key" name="CorrectKey">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@L("Cancel")</button>
+                <button type="button" class="btn btn-primary" id="btnSaveQuestion">@L("Save")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.edit-q-btn').on('click', function () {
+                var button = $(this);
+
+                $('#edit-id').val(button.data('id'));
+                $('#modal-q-num').text(button.data('num'));
+                $('#edit-content').val(button.data('content'));
+                $('#edit-a').val(button.data('a'));
+                $('#edit-b').val(button.data('b'));
+                $('#edit-c').val(button.data('c'));
+                $('#edit-d').val(button.data('d'));
+                $('#edit-key').val(button.data('key'));
+
+                $('#EditQuestionModal').modal('show');
+            });
+
+            $('#btnSaveQuestion').on('click', function () {
+                var data = {
+                    id: $('#edit-id').val(),
+                    content: $('#edit-content').val(),
+                    optionA: $('#edit-a').val(),
+                    optionB: $('#edit-b').val(),
+                    optionC: $('#edit-c').val(),
+                    optionD: $('#edit-d').val(),
+                    correctKey: $('#edit-key').val()
+                };
+
+                abp.ajax({
+                    url: '/Exam/UpdateQuestion',
+                    data: JSON.stringify(data),
+                    success: function () {
+                        abp.notify.success('@L("SavedSuccessfully")');
+                        $('#EditQuestionModal').modal('hide');
+                        location.reload();
+                    }
+                });
+            });
+
+            $('.btn-delete-exam').on('click', function () {
+                abp.message.confirm('@L("DeleteExamConfirm")', '@L("ConfirmActionTitle")', function (isConfirmed) {
+                    if (!isConfirmed) {
+                        return;
+                    }
+
+                    abp.ajax({
+                        url: '/Exam/Delete?id=@Model.Id',
+                        type: 'POST',
+                        success: function () {
+                            abp.notify.success('@L("SuccessfullyDeleted")');
+                            window.location.href = '/Exam/List';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}
