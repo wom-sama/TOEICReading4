@@ -1,6 +1,8 @@
+@using TOEICReading4.Web.Startup
 @model TOEICReading4.Exams.Exam
 @{
     ViewBag.Title = L("PreviewExamPageTitle", Model.Title);
+    ViewBag.CurrentPageName = PageNames.ExamLibrary;
 
     var questions = Model.Questions.OrderBy(q => q.QuestionNumber).ToList();
     var part5 = questions.Where(q => q.QuestionNumber >= 101 && q.QuestionNumber <= 130).ToList();
@@ -8,69 +10,182 @@
     var part7 = questions.Where(q => q.QuestionNumber >= 147 && q.QuestionNumber <= 200).ToList();
 }
 
+@section Styles {
+    <style>
+        .preview-page {
+            gap: 1.35rem;
+        }
+
+        .preview-tabs .nav-link {
+            border: 0;
+            border-radius: 999px;
+            padding: 0.72rem 1rem;
+            color: var(--text-700);
+            font-weight: 800;
+            background: rgba(255, 245, 249, 0.92);
+        }
+
+        .preview-tabs .nav-link.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--rose-500), #ff95c6);
+            box-shadow: 0 14px 28px rgba(255, 108, 171, 0.2);
+        }
+
+        .question-stack {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .preview-question-card {
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(255, 214, 232, 0.96);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .preview-question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 246, 250, 0.9);
+            border-bottom: 1px solid rgba(255, 219, 233, 0.95);
+        }
+
+        .preview-question-header strong {
+            font-size: 1rem;
+        }
+
+        .preview-question-body {
+            padding: 1.15rem 1.2rem;
+        }
+
+        .preview-question-body p {
+            margin-bottom: 1rem;
+            color: var(--text-700);
+            font-weight: 700;
+            line-height: 1.75;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .option-card {
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            background: rgba(255, 248, 251, 0.84);
+            border: 1px solid rgba(255, 221, 235, 0.96);
+            color: var(--text-700);
+            font-weight: 700;
+        }
+
+        .option-card.correct {
+            background: linear-gradient(135deg, rgba(255, 108, 171, 0.16), rgba(255, 189, 216, 0.3));
+            border-color: rgba(255, 108, 171, 0.45);
+            color: var(--rose-700);
+        }
+
+        .preview-empty {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-600);
+            font-weight: 700;
+        }
+
+        @@media (max-width: 767.98px) {
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-question-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+}
+
 @{
     void RenderPart(List<TOEICReading4.Exams.Question> items, string title)
     {
-        <h5 class="text-primary fw-bold mb-3 mt-4">@title</h5>
-
-        if (!items.Any())
-        {
-            <p class="text-muted fst-italic">@L("NoQuestions")</p>
-        }
-
-        foreach (var question in items)
-        {
-            <div class="card shadow-sm mb-3" id="q-card-@question.Id">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center gap-3">
-                    <strong>@L("Question") @question.QuestionNumber</strong>
-                    <button class="btn btn-sm btn-primary edit-q-btn"
-                            data-id="@question.Id"
-                            data-num="@question.QuestionNumber"
-                            data-content="@question.Content"
-                            data-a="@question.OptionA"
-                            data-b="@question.OptionB"
-                            data-c="@question.OptionC"
-                            data-d="@question.OptionD"
-                            data-key="@question.CorrectKey">
-                        <i class="fas fa-edit me-1"></i>@L("Edit")
-                    </button>
-                </div>
-                <div class="card-body">
-                    <p class="mb-3">@Html.Raw(question.Content?.Replace("\n", "<br />"))</p>
-                    <div class="row g-2">
-                        <div class="col-md-3"><span class="@(question.CorrectKey == "A" ? "fw-bold text-success" : string.Empty)">[A] @question.OptionA</span></div>
-                        <div class="col-md-3"><span class="@(question.CorrectKey == "B" ? "fw-bold text-success" : string.Empty)">[B] @question.OptionB</span></div>
-                        <div class="col-md-3"><span class="@(question.CorrectKey == "C" ? "fw-bold text-success" : string.Empty)">[C] @question.OptionC</span></div>
-                        <div class="col-md-3"><span class="@(question.CorrectKey == "D" ? "fw-bold text-success" : string.Empty)">[D] @question.OptionD</span></div>
-                    </div>
+        <div class="app-panel">
+            <div class="app-panel-header">
+                <div>
+                    <h2>@title</h2>
                 </div>
             </div>
-        }
+
+            @if (!items.Any())
+            {
+                <div class="preview-empty">@L("NoQuestions")</div>
+            }
+            else
+            {
+                <div class="question-stack">
+                    @foreach (var question in items)
+                    {
+                        <div class="preview-question-card" id="q-card-@question.Id">
+                            <div class="preview-question-header">
+                                <strong>@L("Question") @question.QuestionNumber</strong>
+                                <button class="btn btn-primary edit-q-btn"
+                                        data-id="@question.Id"
+                                        data-num="@question.QuestionNumber"
+                                        data-content="@question.Content"
+                                        data-a="@question.OptionA"
+                                        data-b="@question.OptionB"
+                                        data-c="@question.OptionC"
+                                        data-d="@question.OptionD"
+                                        data-key="@question.CorrectKey">
+                                    <i class="fas fa-edit me-2"></i>@L("Edit")
+                                </button>
+                            </div>
+                            <div class="preview-question-body">
+                                <p>@Html.Raw(question.Content?.Replace("\n", "<br />"))</p>
+                                <div class="option-grid">
+                                    <div class="option-card @(question.CorrectKey == "A" ? "correct" : string.Empty)">[A] @question.OptionA</div>
+                                    <div class="option-card @(question.CorrectKey == "B" ? "correct" : string.Empty)">[B] @question.OptionB</div>
+                                    <div class="option-card @(question.CorrectKey == "C" ? "correct" : string.Empty)">[C] @question.OptionC</div>
+                                    <div class="option-card @(question.CorrectKey == "D" ? "correct" : string.Empty)">[D] @question.OptionD</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     }
 }
 
-<div class="card shadow-sm border-0">
-    <div class="card-body p-4 p-lg-5">
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+<div class="app-page preview-page">
+    <section class="app-hero">
+        <div class="app-hero-content">
             <div>
-                <h2 class="fw-bold mb-2">@Model.Title</h2>
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="badge rounded-pill text-bg-warning">@L("DraftStatus")</span>
-                    <span class="badge rounded-pill text-bg-info">@L("DurationLabel"): @Model.DurationMinutes @L("MinutesShort")</span>
-                    <span class="badge rounded-pill text-bg-success">@L("QuestionCountLabel"): @questions.Count</span>
+                <div class="app-hero-badges">
+                    <span class="app-chip"><i class="fas fa-eye"></i>@L("PreviewExam")</span>
+                    <span class="app-chip"><i class="fas fa-hourglass-half"></i>@Model.DurationMinutes @L("MinutesShort")</span>
+                    <span class="app-chip"><i class="fas fa-list-ol"></i>@questions.Count @L("QuestionCountLabel")</span>
                 </div>
+                <h1>@Model.Title</h1>
             </div>
-            <div class="d-flex gap-2 flex-wrap">
-                <a class="btn btn-outline-primary" href="/Exam/List">
+
+            <div class="app-actions">
+                <a class="btn btn-secondary" href="/Exam/List">
                     <i class="fas fa-book-open me-2"></i>@L("ExamLibrary")
                 </a>
-                <button class="btn btn-outline-danger btn-delete-exam">
+                <button class="btn btn-danger btn-delete-exam">
                     <i class="fas fa-trash me-2"></i>@L("DeleteExamDraft")
                 </button>
             </div>
         </div>
+    </section>
 
-        <ul class="nav nav-pills mb-4" id="preview-tabs" role="tablist">
+    <section class="app-panel">
+        <ul class="nav nav-pills preview-tabs mb-4" id="preview-tabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="tab-p5" data-bs-toggle="pill" data-bs-target="#panel-p5" type="button">@L("Part5PreviewTitle")</button>
             </li>
@@ -93,22 +208,22 @@
                 @{ RenderPart(part7, L("Part7PreviewTitle")); }
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <div class="modal fade" id="EditQuestionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <h5 class="modal-title">@L("EditQuestionDialogTitle") <span id="modal-q-num"></span></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="EditQuestionForm">
                     <input type="hidden" id="edit-id" name="Id" />
                     <div class="mb-3">
                         <label class="form-label fw-bold">@L("QuestionContent")</label>
-                        <textarea class="form-control" id="edit-content" name="Content" rows="3"></textarea>
+                        <textarea class="form-control" id="edit-content" name="Content" rows="4"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">

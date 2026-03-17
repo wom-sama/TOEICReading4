@@ -86,13 +86,7 @@ public class AccountController : TOEICReading4ControllerBase
             returnUrl = GetAppHomeUrl();
         }
 
-        return View(new LoginFormViewModel
-        {
-            ReturnUrl = returnUrl,
-            IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
-            IsSelfRegistrationAllowed = IsSelfRegistrationEnabled(),
-            MultiTenancySide = AbpSession.MultiTenancySide
-        });
+        return View(CreateLoginFormModel(returnUrl, userNameOrEmailAddress));
     }
 
     [HttpPost]
@@ -105,17 +99,35 @@ public class AccountController : TOEICReading4ControllerBase
             returnUrl = returnUrl + returnUrlHash;
         }
 
-        var loginResult = await GetLoginResultAsync(loginModel.UsernameOrEmailAddress, loginModel.Password, GetTenancyNameOrNull());
-
-        await _signInManager.SignInAsync(loginResult.Identity, loginModel.RememberMe);
-        await UnitOfWorkManager.Current.SaveChangesAsync();
-
-        if (IsAjaxRequest())
+        if (!ModelState.IsValid)
         {
-            return Json(new AjaxResponse { TargetUrl = returnUrl });
+            return View(CreateLoginFormModel(returnUrl, loginModel.UsernameOrEmailAddress, loginModel.RememberMe));
         }
 
-        return Redirect(returnUrl);
+        try
+        {
+            var loginResult = await GetLoginResultAsync(loginModel.UsernameOrEmailAddress, loginModel.Password, GetTenancyNameOrNull());
+
+            await _signInManager.SignInAsync(loginResult.Identity, loginModel.RememberMe);
+            await UnitOfWorkManager.Current.SaveChangesAsync();
+
+            if (IsAjaxRequest())
+            {
+                return Json(new AjaxResponse { TargetUrl = returnUrl });
+            }
+
+            return Redirect(returnUrl);
+        }
+        catch (UserFriendlyException ex)
+        {
+            if (IsAjaxRequest())
+            {
+                return Json(new AjaxResponse(new ErrorInfo(ex.Message)));
+            }
+
+            ViewBag.ErrorMessage = ex.Message;
+            return View(CreateLoginFormModel(returnUrl, loginModel.UsernameOrEmailAddress, loginModel.RememberMe));
+        }
     }
 
     public async Task<ActionResult> Logout()
@@ -144,6 +156,19 @@ public class AccountController : TOEICReading4ControllerBase
             "XMLHttpRequest",
             StringComparison.OrdinalIgnoreCase
         );
+    }
+
+    private LoginFormViewModel CreateLoginFormModel(string returnUrl, string userNameOrEmailAddress = "", bool rememberMe = false)
+    {
+        return new LoginFormViewModel
+        {
+            ReturnUrl = returnUrl,
+            UsernameOrEmailAddress = userNameOrEmailAddress,
+            RememberMe = rememberMe,
+            IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled,
+            IsSelfRegistrationAllowed = IsSelfRegistrationEnabled(),
+            MultiTenancySide = AbpSession.MultiTenancySide
+        };
     }
 
     #endregion
