@@ -1,19 +1,19 @@
 :root {
-  --rose-50: #fff8fc;
-  --rose-100: #fff0f7;
-  --rose-150: #ffe7f1;
-  --rose-200: #ffd6e8;
-  --rose-300: #ffbdd8;
-  --rose-400: #ff93c1;
-  --rose-500: #ff6cab;
-  --rose-600: #e64f91;
-  --rose-700: #b93170;
-  --text-900: #5b2442;
-  --text-700: #844362;
-  --text-600: #9e6480;
-  --border-soft: rgba(255, 164, 204, 0.42);
-  --shadow-soft: 0 22px 48px rgba(217, 111, 159, 0.16);
-  --shadow-hover: 0 28px 58px rgba(217, 111, 159, 0.2);
+  --rose-50: #f0f9ff;
+  --rose-100: #e0f2fe;
+  --rose-150: #bae6fd;
+  --rose-200: #7dd3fc;
+  --rose-300: #38bdf8;
+  --rose-400: #0ea5e9;
+  --rose-500: #0284c7;
+  --rose-600: #0369a1;
+  --rose-700: #0c4a6e;
+  --text-900: #0c2d4a;
+  --text-700: #164e63;
+  --text-600: #206b87;
+  --border-soft: rgba(14, 165, 233, 0.42);
+  --shadow-soft: 0 22px 48px rgba(2, 132, 199, 0.16);
+  --shadow-hover: 0 28px 58px rgba(2, 132, 199, 0.2);
 }
 
 html {
@@ -25,9 +25,9 @@ body {
   color: var(--text-900);
   font-family: "Nunito", sans-serif;
   background:
-    radial-gradient(circle at 12% 8%, rgba(255, 173, 210, 0.36), transparent 26%),
-    radial-gradient(circle at 88% 16%, rgba(255, 214, 232, 0.9), transparent 20%),
-    linear-gradient(180deg, #fffafc 0%, #fff2f8 48%, #fff9fc 100%);
+    radial-gradient(circle at 12% 8%, rgba(2, 132, 199, 0.36), transparent 26%),
+    radial-gradient(circle at 88% 16%, rgba(14, 165, 233, 0.9), transparent 20%),
+    linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 48%, #f0f9ff 100%);
 }
 
 h1,
@@ -75,8 +75,8 @@ a:hover {
   overflow: hidden;
   padding: 2rem;
   border-radius: 32px;
-  background: linear-gradient(135deg, #ff96c8 0%, #ffb9dc 48%, #ffe7f1 100%);
-  border: 1px solid rgba(255, 154, 199, 0.4);
+  background: linear-gradient(135deg, #0ea5e9 0%, #7dd3fc 48%, #bae6fd 100%);
+  border: 1px solid rgba(14, 165, 233, 0.4);
   box-shadow: var(--shadow-soft);
 }
 

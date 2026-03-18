@@ -1,15 +1,15 @@
 :root {
-  --rose-100: #fff2f8;
-  --rose-200: #ffe4f1;
-  --rose-300: #ffcade;
-  --rose-400: #ff9ec8;
-  --rose-500: #ff71ad;
-  --rose-600: #e55092;
-  --text-900: #5b2442;
-  --text-700: #83425f;
-  --text-600: #9f6a83;
-  --border-soft: rgba(255, 176, 210, 0.5);
-  --shadow-soft: 0 28px 64px rgba(218, 114, 162, 0.2);
+  --rose-100: #e0f2fe;
+  --rose-200: #7dd3fc;
+  --rose-300: #38bdf8;
+  --rose-400: #0ea5e9;
+  --rose-500: #0284c7;
+  --rose-600: #0369a1;
+  --text-900: #0c2d4a;
+  --text-700: #164e63;
+  --text-600: #206b87;
+  --border-soft: rgba(14, 165, 233, 0.5);
+  --shadow-soft: 0 28px 64px rgba(2, 132, 199, 0.2);
 }
 
 body.account-theme {
@@ -18,9 +18,9 @@ body.account-theme {
   font-family: "Nunito", sans-serif;
   color: var(--text-900);
   background:
-    radial-gradient(circle at 10% 12%, rgba(255, 196, 223, 0.48), transparent 22%),
-    radial-gradient(circle at 86% 14%, rgba(255, 224, 237, 0.92), transparent 20%),
-    linear-gradient(180deg, #fffafc 0%, #fff2f8 55%, #fff9fc 100%);
+    radial-gradient(circle at 10% 12%, rgba(2, 132, 199, 0.48), transparent 22%),
+    radial-gradient(circle at 86% 14%, rgba(14, 165, 233, 0.92), transparent 20%),
+    linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 55%, #f0f9ff 100%);
 }
 
 .account-shell {
@@ -37,7 +37,7 @@ body.account-theme {
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   border-radius: 36px;
   overflow: hidden;
-  border: 1px solid rgba(255, 210, 229, 0.8);
+  border: 1px solid rgba(14, 165, 233, 0.8);
   box-shadow: var(--shadow-soft);
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(18px);
@@ -51,7 +51,7 @@ body.account-theme {
 
 .account-hero {
   padding: 2.5rem;
-  background: linear-gradient(160deg, #ff9ac8 0%, #ffbadc 48%, #ffe9f3 100%);
+  background: linear-gradient(160deg, #0ea5e9 0%, #7dd3fc 48%, #bae6fd 100%);
   overflow: hidden;
 }
 
@@ -92,10 +92,10 @@ body.account-theme {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--rose-500), #ff9bc9);
+  background: linear-gradient(135deg, var(--rose-500), #0ea5e9);
   color: #fff;
   font-size: 1.35rem;
-  box-shadow: 0 18px 32px rgba(255, 113, 173, 0.25);
+  box-shadow: 0 18px 32px rgba(2, 132, 199, 0.25);
 }
 
 .account-brand strong,
@@ -195,7 +195,7 @@ body.account-theme {
   border: 0;
   border-radius: 32px;
   background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 18px 42px rgba(218, 114, 162, 0.14);
+  box-shadow: 0 18px 42px rgba(2, 132, 199, 0.14);
   overflow: hidden;
 }
 
@@ -215,11 +215,11 @@ body.account-theme {
 }
 
 .card-header {
-  border-bottom: 1px solid rgba(255, 222, 235, 0.92);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.92);
 }
 
 .card-footer {
-  border-top: 1px solid rgba(255, 222, 235, 0.92);
+  border-top: 1px solid rgba(14, 165, 233, 0.92);
 }
 
 .account-form-head {
@@ -241,8 +241,8 @@ body.account-theme {
 .auth-card {
   padding: 1.35rem;
   border-radius: 28px;
-  background: rgba(255, 248, 251, 0.92);
-  border: 1px solid rgba(255, 219, 233, 0.96);
+  background: rgba(240, 249, 255, 0.92);
+  border: 1px solid rgba(14, 165, 233, 0.96);
 }
 
 .auth-form {
@@ -275,7 +275,7 @@ body.account-theme {
 
 .auth-field .form-control:focus {
   border-color: var(--rose-500);
-  box-shadow: 0 0 0 0.24rem rgba(255, 113, 173, 0.14);
+  box-shadow: 0 0 0 0.24rem rgba(2, 132, 199, 0.14);
 }
 
 .auth-check,
@@ -329,8 +329,8 @@ body.account-theme {
 .btn-primary {
   border: 0;
   color: #fff;
-  background: linear-gradient(135deg, var(--rose-500), #ff9bc9);
-  box-shadow: 0 16px 28px rgba(255, 113, 173, 0.2);
+  background: linear-gradient(135deg, var(--rose-500), #0ea5e9);
+  box-shadow: 0 16px 28px rgba(2, 132, 199, 0.2);
 }
 
 .btn-secondary {
@@ -368,10 +368,7 @@ body.account-theme {
   padding: 0.95rem 1rem;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(255, 219, 233, 0.96);
-}
-
-.account-summary span {
+  border: 1px solid rgba(14, 165, 233, 0.96);
   color: var(--text-600);
   font-weight: 700;
 }
