@@ -1,7 +1,4 @@
-.login-box {
-  width: inherit;
-}
-
 .forbidden-box {
-  max-width: 350px;
+  max-width: none;
+  min-height: 220px;
 }

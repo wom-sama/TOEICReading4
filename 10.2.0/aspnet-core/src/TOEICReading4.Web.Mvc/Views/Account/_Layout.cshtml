@@ -1,4 +1,4 @@
-﻿@using Abp.Configuration.Startup
+@using Abp.Configuration.Startup
 @using Abp.Web.Security.AntiForgery
 @using TOEICReading4
 @using TOEICReading4.Web.Resources
@@ -12,7 +12,7 @@
 
     var pageTitle = !string.IsNullOrWhiteSpace(ViewBag.Title) ? ViewBag.Title + " / " : "";
     pageTitle += "TOEICReading4";
-    
+
     var hideTenantChange = ViewBag.HideTenantChange != null && ViewBag.HideTenantChange == true;
     var showTenantChange = MultiTenancyConfig.IsEnabled && !hideTenantChange;
 }
@@ -28,29 +28,45 @@
     @await Html.PartialAsync("_Styles.cshtml")
     @RenderSection("styles", required: false)
 </head>
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="/"><b>TOEICReading4</b></a>
-        </div>
-        <div class="card">
-            @if (showTenantChange)
-            {
-                <div class="card-header">
-                    <vc:tenant-change></vc:tenant-change>
+<body class="hold-transition login-page account-theme">
+    <div class="account-shell">
+        <div class="account-stage">
+            <aside class="account-hero">
+                <div class="account-brand">
+                    <span class="account-brand-mark">
+                        <i class="fas fa-heart"></i>
+                    </span>
+                    <div>
+                        <strong>TOEIC Reading</strong>
+                        <span>@L("SpaceStudy")</span>
+                    </div>
                 </div>
-            }
-            <div class="card-body login-card-body">
-                @RenderBody()
-            </div>
-            <div class="card-footer">
-                <vc:account-languages></vc:account-languages>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <small>&copy; @DateTime.Now.Year TOEICReading4. <b>Version </b> @AppVersionHelper.Version [@AppVersionHelper.ReleaseDate.ToString("yyyyMMdd")]</small>
-            </div>
+            </aside>
+
+            <section class="account-panel">
+                <div class="login-box">
+                    <div class="card">
+                        @if (showTenantChange)
+                        {
+                            <div class="card-header">
+                                <vc:tenant-change></vc:tenant-change>
+                            </div>
+                        }
+                        <div class="card-body login-card-body">
+                            @RenderBody()
+                        </div>
+                        <div class="card-footer">
+                            <div class="account-footer-tools">
+                                <vc:account-languages></vc:account-languages>
+                                <small>&copy; @DateTime.Now.Year TOEICReading4</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="account-version">
+                        <small><b>@L("Version")</b> @AppVersionHelper.Version [@AppVersionHelper.ReleaseDate.ToString("yyyyMMdd")]</small>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
     @await Html.PartialAsync("_Scripts.cshtml")

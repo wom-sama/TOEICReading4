@@ -56,6 +56,7 @@
     <text name="NotSelected">Not selected</text>
     <text name="Change">Change</text>
     <text name="ChangeTenant">Change tenant</text>
+    <text name="CouldNotOpenTenantSelector">Could not open tenant selector. Please try again.</text>
     <text name="MultiLevelMenu">Multi Level Menu</text>
     <text name="Back">Back</text>
     <text name="SuccessfullyRegistered">Successfully registered</text>
@@ -226,5 +227,7 @@
     <text name="QuickActionsTitle">Quick Actions</text>
     <text name="UploadNewExamAction">Upload a new exam</text>
     <text name="BrowseExamLibraryAction">Open exam library</text>
+    <text name="SpaceStudy">Space study</text>
+    <text name="DontHaveAnAccount">Don't have an account?</text>
   </texts>
 </localizationDictionary>

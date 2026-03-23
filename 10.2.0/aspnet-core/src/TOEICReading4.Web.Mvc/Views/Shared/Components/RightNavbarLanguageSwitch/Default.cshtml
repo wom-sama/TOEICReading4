@@ -1,8 +1,8 @@
-﻿@using TOEICReading4.Web.Views.Shared.Components.RightNavbarLanguageSwitch
+@using TOEICReading4.Web.Views.Shared.Components.RightNavbarLanguageSwitch
 @model RightNavbarLanguageSwitchViewModel
 
 <li class="nav-item dropdown">
-    <a href="javascript:void(0);" class="nav-link" data-bs-toggle="dropdown" role="button">
+    <a href="javascript:void(0);" class="nav-link language-trigger" data-bs-toggle="dropdown" role="button">
         <i class="@Model.CurrentLanguage.Icon" title="@Model.CurrentLanguage.DisplayName"></i>
         <span class="d-none d-md-inline-block">@Model.CurrentLanguage.DisplayName</span>
     </a>

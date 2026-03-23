@@ -1,4 +1,4 @@
-﻿@using TOEICReading4.Web.Startup
+@using TOEICReading4.Web.Startup
 @{
     ViewBag.Title = L("Tenants");
     ViewBag.CurrentPageName = PageNames.Tenants;
@@ -13,61 +13,53 @@
         <script src="~/view-resources/Views/Tenants/Index.min.js" asp-append-version="true"></script>
     </environment>
 }
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
+
+<div class="app-page">
+    <section class="app-hero">
+        <div class="app-hero-content">
+            <div>
+                <div class="app-hero-badges">
+                    <span class="app-chip"><i class="fas fa-building"></i>@L("Tenants")</span>
+                </div>
                 <h1>@L("Tenants")</h1>
             </div>
-            <div class="col-sm-6">
-                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#TenantCreateModal" class="btn bg-blue float-sm-right">
-                    <i class="fa fa-plus-square"></i>
-                    @L("Create")
+
+            <div class="app-actions">
+                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#TenantCreateModal" class="btn btn-primary">
+                    <i class="fa fa-plus-square me-2"></i>@L("Create")
                 </a>
             </div>
         </div>
-    </div>
-</section>
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!--Use for bulk actions-->
-                            </div>
-                            <div class="col-md-6">
-                                @await Html.PartialAsync("~/Views/Tenants/Index.AdvancedSearch.cshtml")
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="TenantsTable" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>@L("TenancyName")</th>
-                                        <th>@L("Name")</th>
-                                        <th>@L("IsActive")</th>
-                                        <th style="width: 150px">@L("Actions")</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    </section>
+
+    <section class="app-panel">
+        <div class="app-panel-header">
+            <div>
+                <h2>@L("Tenants")</h2>
             </div>
+            @await Html.PartialAsync("~/Views/Tenants/Index.AdvancedSearch.cshtml")
         </div>
-    </div>
-</section>
+
+        <div class="app-table-wrap">
+            <table id="TenantsTable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>@L("TenancyName")</th>
+                        <th>@L("Name")</th>
+                        <th>@L("IsActive")</th>
+                        <th style="width: 150px">@L("Actions")</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+</div>
 
 @await Html.PartialAsync("~/Views/Tenants/_CreateModal.cshtml")
 
-<div class="modal fade" id="TenantEditModal" tabindex="-1" role="dialog" aria-labelledby="TenantEditModalLabel" data-backdrop="static">
+<div class="modal fade" id="TenantEditModal" tabindex="-1" role="dialog" aria-labelledby="TenantEditModalLabel" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
         </div>

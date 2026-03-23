@@ -125,5 +125,8 @@
     <text name="QuickActionsTitle" value="Thao tác nhanh" />
     <text name="UploadNewExamAction" value="Tải lên đề mới" />
     <text name="BrowseExamLibraryAction" value="Mở thư viện đề" />
+    <text name="SpaceStudy" value="KhÃ´ng gian há»c" />
+    <text name="DontHaveAnAccount" value="ChÆ°a cÃ³ tÃ i khoáº£n?" />
+    <text name="CouldNotOpenTenantSelector" value="KhÃ´ng thá»ƒ má»Ÿ bá»™ chá»n tenant. Vui lÃ²ng thá»­ láº¡i." />
   </texts>
 </localizationDictionary>

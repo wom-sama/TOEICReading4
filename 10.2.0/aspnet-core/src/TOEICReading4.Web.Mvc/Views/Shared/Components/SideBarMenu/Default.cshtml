@@ -1,10 +1,10 @@
-﻿@using TOEICReading4.Web.Views.Shared.Components.SideBarMenu
+@using TOEICReading4.Web.Views.Shared.Components.SideBarMenu
 @model SideBarMenuViewModel
-@{ 
+@{
     var orderedMenuItems = Model.MainMenu.Items.Where(x => x.IsVisible).ToList();
 }
 
-<nav class="mt-2">
+<nav class="sidebar-nav">
     <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
         @{
             foreach (var item in orderedMenuItems)

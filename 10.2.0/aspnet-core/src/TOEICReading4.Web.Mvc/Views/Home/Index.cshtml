@@ -1,112 +1,93 @@
 @using TOEICReading4.Web.Startup
 @{
     ViewBag.Title = L("UploadExam");
-    ViewBag.CurrentPageName = PageNames.Home;
+    ViewBag.CurrentPageName = PageNames.UploadExam;
 }
 
 @section Styles {
     <style>
-        :root {
-            --primary: #2563eb;
-            --success: #10b981;
-            --danger: #ef4444;
-            --surface: #ffffff;
-            --surface-alt: #f8fafc;
-            --text: #111827;
-            --muted: #64748b;
-            --border: #dbe3ef;
-            --shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        .upload-page {
+            gap: 1.4rem;
         }
 
-        .upload-shell {
-            padding: 2rem 0 3rem;
+        .upload-layout {
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
         }
 
-        .upload-hero {
-            border-radius: 24px;
-            padding: 2.35rem 2rem;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 62%, #2563eb 100%);
-            color: #fff;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-        }
-
-        .upload-hero h1 {
-            margin: 0 0 8px;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .upload-hero p {
+        .guide-list {
+            list-style: none;
             margin: 0;
-            color: rgba(255, 255, 255, 0.82);
+            padding: 0;
+            display: grid;
+            gap: 0.85rem;
         }
 
-        .info-card,
-        .form-card {
-            border-radius: 22px;
-            background: var(--surface);
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-card {
-            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
-        }
-
-        .info-card h3,
-        .section-title {
+        .guide-list li {
             display: flex;
+            gap: 0.7rem;
+            align-items: start;
+            padding: 0.95rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 247, 251, 0.82);
+            border: 1px solid rgba(255, 218, 233, 0.95);
+            color: var(--text-700);
+            font-weight: 700;
+        }
+
+        .guide-list i {
+            color: var(--rose-600);
+            margin-top: 0.15rem;
+        }
+
+        .guide-link {
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            margin: 0 0 1rem;
-            font-size: 1.08rem;
-            font-weight: 700;
-        }
-
-        .info-card ul {
-            margin: 0;
-            padding-left: 1.2rem;
-            color: var(--muted);
-        }
-
-        .info-card li + li {
-            margin-top: 8px;
-        }
-
-        .template-link {
-            font-weight: 700;
+            gap: 0.5rem;
+            margin-top: 1rem;
             text-decoration: none;
         }
 
+        .upload-form-shell {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .upload-form-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1rem;
+        }
+
+        .upload-section-title {
+            margin: 0 0 0.25rem;
+            font-size: 1.25rem;
+            color: var(--text-900);
+        }
+
+        .upload-section-copy {
+            margin: 0 0 1rem;
+            color: var(--text-600);
+            font-weight: 700;
+        }
+
         .field-label {
-            font-weight: 600;
-            color: var(--text);
+            display: block;
             margin-bottom: 0.45rem;
+            font-weight: 800;
         }
 
         .required {
-            color: var(--danger);
-        }
-
-        .form-control {
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            padding: 0.85rem 1rem;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.08);
+            color: #ff4f8c;
         }
 
         .upload-dropzone {
-            border: 2px dashed rgba(37, 99, 235, 0.45);
-            border-radius: 22px;
-            background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 100%);
-            padding: 2.6rem 1.5rem;
+            border: 2px dashed rgba(255, 113, 173, 0.45);
+            border-radius: 28px;
+            background: linear-gradient(135deg, #fff8fc 0%, #fff0f7 100%);
+            padding: 2.5rem 1.4rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -114,9 +95,9 @@
 
         .upload-dropzone:hover,
         .upload-dropzone.dragover {
-            border-color: var(--success);
-            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
             transform: translateY(-2px);
+            border-color: var(--rose-500);
+            box-shadow: 0 22px 42px rgba(217, 111, 159, 0.16);
         }
 
         .upload-dropzone input[type="file"] {
@@ -124,139 +105,145 @@
         }
 
         .upload-icon {
-            font-size: 3.2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
+            width: 74px;
+            height: 74px;
+            margin: 0 auto 1rem;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--rose-500), #ff9dc9);
+            color: #fff;
+            font-size: 2rem;
+            box-shadow: 0 18px 30px rgba(255, 108, 171, 0.22);
         }
 
         .upload-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--text);
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: var(--text-900);
             margin-bottom: 0.35rem;
         }
 
         .upload-hint {
-            color: var(--muted);
+            color: var(--text-600);
             margin: 0;
+            font-weight: 700;
         }
 
         .selected-file {
             display: none;
             margin-top: 1rem;
-            font-weight: 700;
-            color: var(--success);
+            color: var(--rose-700);
+            font-weight: 800;
         }
 
-        .form-actions {
-            display: flex;
+        .upload-actions {
             justify-content: flex-end;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
         }
 
-        .action-btn {
-            border: 0;
-            border-radius: 14px;
-            padding: 0.85rem 1.25rem;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .action-btn.secondary {
-            color: var(--text);
-            background: #fff;
-            border: 1px solid rgba(148, 163, 184, 0.28);
-        }
-
-        .action-btn.primary {
-            color: #fff;
-            background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
-        }
-
-        @@media (max-width: 576px) {
-            .upload-hero,
-            .info-card,
-            .form-card {
-                padding-left: 1.1rem;
-                padding-right: 1.1rem;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                width: 100%;
-                text-align: center;
+        @@media (max-width: 1100px) {
+            .upload-layout,
+            .upload-form-grid {
+                grid-template-columns: 1fr;
             }
         }
+
     </style>
 }
 
-<div class="container-fluid px-3 px-md-4 upload-shell">
-    <div class="upload-hero">
-        <h1><i class="fas fa-file-upload me-2"></i>@L("UploadExam")</h1>
-        <p>@L("UploadExamDescription")</p>
-    </div>
-
-    <div class="info-card">
-        <h3><i class="fas fa-circle-info text-primary"></i>@L("QuickGuide")</h3>
-        <ul>
-            <li>@L("UploadInfoFileRequirement")</li>
-            <li>@L("UploadInfoTagUsage")</li>
-            <li>@L("UploadInfoSupportedParts")</li>
-            <li><a class="template-link" href="/Template/Toeic_Template.docx">@L("DownloadTemplate")</a></li>
-        </ul>
-    </div>
-
-    <form id="frmUploadExam" enctype="multipart/form-data">
-        <div class="form-card">
-            <h3 class="section-title"><i class="fas fa-info-circle text-primary"></i>@L("GeneralInfoSection")</h3>
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <label class="field-label">@L("ExamTitle") <span class="required">*</span></label>
-                    <input type="text" class="form-control" name="examTitle" placeholder="@L("ExamTitlePlaceholder")" required />
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="field-label">@L("DurationLabel") <span class="required">*</span></label>
-                    <input type="number" class="form-control" name="duration" value="75" min="30" max="180" required />
-                </div>
-            </div>
-
+<div class="app-page upload-page">
+    <section class="app-hero">
+        <div class="app-hero-content">
             <div>
-                <label class="field-label">@L("Description")</label>
-                <textarea class="form-control" name="description" rows="3" placeholder="@L("ShortDescriptionPlaceholder")"></textarea>
+                <div class="app-hero-badges">
+                    <span class="app-chip"><i class="fas fa-file-word"></i>.docx</span>
+                    <span class="app-chip"><i class="fas fa-book-open"></i>@L("ToeicReadingCategory")</span>
+                    <span class="app-chip"><i class="fas fa-feather-alt"></i>@L("SpaceStudy")</span>
+                </div>
+                <h1>@L("UploadExam")</h1>
+                <p>@L("UploadExamDescription")</p>
             </div>
         </div>
+    </section>
 
-        <div class="form-card">
-            <h3 class="section-title"><i class="fas fa-file-import text-primary"></i>@L("InputDataSection")</h3>
-            <label class="field-label">@L("ExamFile") <span class="required">*</span></label>
-
-            <label class="upload-dropzone" for="fileInput">
-                <div class="upload-icon">
-                    <i class="fas fa-file-word"></i>
+    <div class="upload-layout">
+        <aside class="app-panel">
+            <div class="app-panel-header">
+                <div>
+                    <h2>@L("QuickGuide")</h2>
                 </div>
-                <div class="upload-title" id="uploadLabel">@L("UploadBoxLabel")</div>
-                <p class="upload-hint">@L("UploadBoxHint")</p>
-                <div class="selected-file" id="fileNameDisplay">
-                    <i class="fas fa-check-circle me-2"></i><span id="selectedFileName"></span>
-                </div>
-                <input type="file" id="fileInput" name="examFile" accept=".docx" required />
-            </label>
-
-            <div class="form-actions">
-                <a href="/Home/Dashboard" class="action-btn secondary">
-                    <i class="fas fa-arrow-left me-2"></i>@L("DashboardPage")
-                </a>
-                <button type="submit" class="action-btn primary" id="btnSubmit">
-                    <i class="fas fa-cloud-upload-alt me-2"></i>@L("UploadExam")
-                </button>
             </div>
-        </div>
-    </form>
+
+            <ul class="guide-list">
+                <li><i class="fas fa-check-circle"></i><span>@L("UploadInfoFileRequirement")</span></li>
+                <li><i class="fas fa-tags"></i><span>@L("UploadInfoTagUsage")</span></li>
+                <li><i class="fas fa-layer-group"></i><span>@L("UploadInfoSupportedParts")</span></li>
+            </ul>
+
+            <a class="btn btn-secondary guide-link" href="/Template/Toeic_Template.docx">
+                <i class="fas fa-download"></i>@L("DownloadTemplate")
+            </a>
+        </aside>
+
+        <form id="frmUploadExam" enctype="multipart/form-data" class="upload-form-shell">
+            <div class="upload-form-grid">
+                <section class="app-panel">
+                    <div class="app-panel-header">
+                        <div>
+                            <h2 class="upload-section-title">@L("GeneralInfoSection")</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8 mb-3">
+                            <label class="field-label">@L("ExamTitle") <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="examTitle" placeholder="@L("ExamTitlePlaceholder")" required />
+                        </div>
+                        <div class="col-lg-4 mb-3">
+                            <label class="field-label">@L("DurationLabel") <span class="required">*</span></label>
+                            <input type="number" class="form-control" name="duration" value="75" min="30" max="180" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="field-label">@L("Description")</label>
+                            <textarea class="form-control" name="description" rows="4" placeholder="@L("ShortDescriptionPlaceholder")"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="app-panel">
+                    <div class="app-panel-header">
+                        <div>
+                            <h2 class="upload-section-title">@L("InputDataSection")</h2>
+                        </div>
+                    </div>
+
+                    <label class="upload-dropzone" for="fileInput">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-title" id="uploadLabel">@L("UploadBoxLabel")</div>
+                        <p class="upload-hint">@L("UploadBoxHint")</p>
+                        <div class="selected-file" id="fileNameDisplay">
+                            <i class="fas fa-check-circle me-2"></i><span id="selectedFileName"></span>
+                        </div>
+                        <input type="file" id="fileInput" name="examFile" accept=".docx" required />
+                    </label>
+                </section>
+            </div>
+
+            <section class="app-panel">
+                <div class="app-actions upload-actions">
+                    <a href="/Home/Dashboard" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>@L("DashboardPage")
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>@L("UploadExam")
+                    </button>
+                </div>
+            </section>
+        </form>
+    </div>
 </div>
 
 @section Scripts {
